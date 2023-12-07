@@ -1,5 +1,7 @@
-package model;
+package Bot.model;
 
+import Bot.model.unused.OrderStatus;
+import Bot.model.unused.Symbol;
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,6 +14,6 @@ public class Order {
     private double orderQty;
     private Double price;
     private Double stopPx;
-    private OrderType orderType;
+    private OrderTypeConverter.OrderType orderType;
     private OrderStatus orderStatus;
 }

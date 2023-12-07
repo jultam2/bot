@@ -1,4 +1,4 @@
-package model;
+package Bot.model.unused;
 
 public enum OrderStatus {
     WORKING,
