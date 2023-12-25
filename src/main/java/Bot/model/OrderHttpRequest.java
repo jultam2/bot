@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 public class OrderHttpRequest {
     private static final Logger logger = LogManager.getLogger(OrderHttpRequest.class);
     @Getter
-    private HttpRequest httpRequest;
+    private final HttpRequest httpRequest;
 
     public OrderHttpRequest(String data, String baseUrl, String endpoint, String httpMethod, AuthHeaders authHeaders) {
 

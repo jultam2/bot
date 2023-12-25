@@ -36,7 +36,6 @@ public class OrderTypeConverter {
             }
         }
     }
-
     public static String getType(OrderType orderType) {
         return orderType != null ? orderType.getType() : null;
     }

@@ -13,21 +13,7 @@ public class DeleteHttpRequest {
     @Getter
     private HttpRequest httpRequest;
 
-    public DeleteHttpRequest(String orderId, String baseUrl, String endpoint, String httpMethod, AuthHeaders authHeaders) {
-
-        httpRequest = HttpRequest.newBuilder()
-                .uri(URI.create(baseUrl + endpoint))
-                .DELETE()
-                .header("api-key", authHeaders.getApiKey())
-                .header("api-signature", authHeaders.getSignature())
-                .header("api-expires", Long.toString(authHeaders.getExpires()))
-                .header("Content-Type", "application/json")
-                .build();
-
-        logger.info("Created HttpRequest: " + httpRequest);
-    }
-
-    public DeleteHttpRequest(String baseUrl, String endpoint, String httpMethod, AuthHeaders authHeaders) {
+    public DeleteHttpRequest(String baseUrl, String endpoint, AuthHeaders authHeaders) {
 
         httpRequest = HttpRequest.newBuilder()
                 .uri(URI.create(baseUrl + endpoint))

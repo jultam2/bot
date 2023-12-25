@@ -9,12 +9,14 @@ import Bot.model.Order;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import lombok.Getter;
 
 import java.net.http.HttpResponse;
 
 public class Parser {
-
     private final OrderRepoList orderRepoList = new OrderRepoList();
+    @Getter
+    private String lastOrderID; // Переменная для хранения последнего OrderID
 
     public void getPrettyOrderList(HttpResponse<String> send) {
         String jsonString = send.body();
@@ -34,7 +36,6 @@ public class Parser {
             processJsonObject(jsonObject, true);
         }
     }
-
     // Метод для обработки JSON-объекта
     private void processJsonObject(JsonObject jsonObject, boolean isSingleObject) {
         // Извлечение данных из объекта
@@ -43,11 +44,9 @@ public class Parser {
         String side = jsonObject.get("side").getAsString();
         int orderQty = jsonObject.get("orderQty").getAsInt();
         double price = jsonObject.get("price").getAsDouble();
-
         // Извлечение типа ордера из объекта
         String orderTypeString = jsonObject.get("ordType").getAsString();
         OrderTypeConverter.OrderType orderType = OrderTypeConverter.OrderType.mapOrderType(orderTypeString);
-
         // Создание объекта Order
         Order order = Order.builder()
                 .orderId(orderId)
@@ -55,14 +54,12 @@ public class Parser {
                 .isBuy("Buy".equals(side))
                 .orderQty(orderQty)
                 .price(price)
-                .orderType(orderType)  // Добавление параметра OrderType
+                .orderType(orderType)
                 .build();
-
         // Добавление объекта Order в список, если это одиночный объект
         if (isSingleObject) {
             orderRepoList.add(order);
         }
-
         // Вывод данных объекта Order в консоль
         System.out.println("Order ID: " + orderId);
         System.out.println("Symbol: " + symbol);
@@ -71,6 +68,8 @@ public class Parser {
         System.out.println("Price: " + price);
         System.out.println("Order Type: " + OrderTypeConverter.getType(orderType));
         System.out.println("---------------------");
+
+        lastOrderID = orderId;
     }
     // Метод для создания JSON-объекта
     public static String toJson(Object object) {
@@ -81,4 +80,5 @@ public class Parser {
             return null;
         }
     }
+
 }

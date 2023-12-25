@@ -4,9 +4,12 @@ public class Endpoints {
     public static final String BASE_TEST_URL = "https://testnet.bitmex.com/api/v1";
     public static final String BASE_REAL_URL = "https://www.bitmex.com/api/v1";
     public static final String ORDER_ENDPOINT = "/order";
+    public static final String SIDE_SELL = "?filter=%7B%22side%22%3A%20%22Sell%22%7D";
+    public static final String SIDE_BUY = "?filter=%7B%22side%22%3A%20%22Buy%22%7D";
     public static final String ORDER_ALL = "/all";
     public static final String ORDER_ID = "?orderID=";
     public static final String PRICE = "&price=";
+    public static final String INSTRUMENT = "/instrument/active";
     public static final String COUNT_100_REVERSE_TRUE = "?count=100&reverse=true";
     public static final String BASE_TEST_URL_WEBSOCKET = "wss://ws.testnet.bitmex.com/realtime";
     public static final String BASE_TEST_URL_WEBSOCKET_REALTIME = "/realtime";
