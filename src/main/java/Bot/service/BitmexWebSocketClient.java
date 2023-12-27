@@ -4,8 +4,9 @@ import Bot.model.Order;
 import Bot.model.OrderTypeConverter;
 import Bot.model.unused.Symbol;
 import Bot.model.util.Endpoints;
-import Bot.model.util.Signature;
 import Bot.model.util.Parser;
+import Bot.model.util.Signature;
+import Bot.repo.OrderQueue;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.websocket.*;
@@ -14,7 +15,6 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
-import java.nio.ByteBuffer;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -54,29 +54,28 @@ public class BitmexWebSocketClient {
     private int sellCounter = 0;
     private boolean anyCounterIncreased = false;
 
-    private Queue<JsonNode> buyMessagesQueue = new LinkedList<>();
-    double totalOrderAmount = 0.0;
-    String orderID = "";
-
+    private OrderQueue<JsonNode> buyMessagesQueue = new OrderQueue<>(1);
+    private double totalOrderAmount = 0.0;
+    private String orderID = null;
+    private double lastPrice = 0.0;
 
     public void connectAndSubscribe() {
         WebSocketContainer container = ContainerProvider.getWebSocketContainer();
         try {
             session = container.connectToServer(this, URI.create(serverUri));
 
-            // Ваша логика подписки
             Map<String, Object> subscribe = new HashMap<>();
             subscribe.put("op", "subscribe");
             subscribe.put("args", "order");
             String json = Parser.toJson(subscribe);
             session.getBasicRemote().sendText(json);
 
-            // Поддерживаем соединение, отправляя периодические ping-сообщения
             pingScheduler = Executors.newSingleThreadScheduledExecutor();
             pingScheduler.scheduleAtFixedRate(this::sendPing, 0, 5, TimeUnit.SECONDS);
+            logger.info("Session opened");
 
         } catch (DeploymentException | IOException e) {
-            e.printStackTrace();
+            logger.error("Error during request: " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -93,10 +92,12 @@ public class BitmexWebSocketClient {
             String json = Parser.toJson(args);
 
             session.getBasicRemote().sendText(json);
+            logger.info("Authentication completed");
         } catch (IOException e) {
             logger.error("Error during request: " + e.getMessage());
         }
     }
+
     @OnMessage
     public void onMessage(String message) {
         try {
@@ -104,67 +105,62 @@ public class BitmexWebSocketClient {
             if (jsonNode.has("data") && jsonNode.get("data").isArray()) {
                 JsonNode dataArray = jsonNode.get("data");
                 for (JsonNode data : dataArray) {
-                    if (data.has("ordStatus") && data.has("side")) {
-                        if (data.get("ordStatus").asText().equals("Canceled") && data.get("side").asText().equals("Buy")) {
-                            buyMessagesQueue.offer(data);
-                            buyCounter++;
-                            anyCounterIncreased = true;
+                    if (data.has("ordStatus") && data.get("ordStatus").asText().equals("Canceled") && data.has("side") && data.get("side").asText().equals("Buy")) {
+                        buyCounter++;
+                        ordersNumber++;
+                        buyMessagesQueue.offer(data);
+                        anyCounterIncreased = true;
+                        orderCanceller.cancelOrders("SELL");
 
-                            orderCanceller.cancelOrders("SELL");
-                            ordersNumber++;
-
-                            if (ordersNumber > 0) {
-                                Thread.sleep(1000);
-                                orderMassOpener.generateSellOrders(priceStep, coefficient, ordersNumber);
-                            }
-
-                        } else if (data.get("ordStatus").asText().equals("Canceled") && data.get("side").asText().equals("Sell")) {
-                            sellCounter++;
-                            anyCounterIncreased = true;
-
-                            if (orderID != null && !orderID.isEmpty()) {
-                                // Если ордер существует, отменяем его
-                                orderCanceller.cancelOrder(orderID);
-                            }
-
-                            JsonNode lastJson = buyMessagesQueue.poll();
-                            double lastPrice = lastJson.get("price").asDouble();
-
-                            List<Double> fibonacciNumbers = fiboGenerator.generateFibonacciSequence(sellCounter);
-                            double orderAmount = fibonacciNumbers.get(fibonacciNumbers.size() - 1) * coefficient;
-                            totalOrderAmount += orderAmount;
-
-                                Order order = Order.builder()
-                                        .orderQty(totalOrderAmount)
-                                        .orderType(OrderTypeConverter.OrderType.LMT)
-                                        .isBuy(true)
-                                        .symbol(Symbol.XBTUSD)
-                                        .price(lastPrice)
-                                        .build();
-
-                                orderSender.sendOrder(order);
-                                orderID = orderSender.getLastOrderID();
-
-                        } else if (data.has("orderID") && data.get("orderID").asText().equals(orderID) && data.get("ordStatus").asText().equals("Cancelled")) {
-                            JsonNode json = objectMapper.readTree(message);
-                            double returnedAmount = 0;
-
-                            if (json != null && json.has("orderQty")) {
-                                returnedAmount = json.get("price").asDouble();
-                            }
-
-                            int desiredNumber = fiboGenerator.findNumberOfElements(returnedAmount, coefficient);
-                            orderMassOpener.generateBuyOrders(priceStep, coefficient, desiredNumber);
+                        if (ordersNumber > 0) {
+                            Thread.sleep(1000);
+                            orderMassOpener.generateSellOrders(priceStep, coefficient, ordersNumber);
                         }
+                        logger.info("Sell orders opened");
                     }
+                    if (data.has("ordStatus") && data.get("ordStatus").asText().equals("Canceled") && data.has("side") && data.get("side").asText().equals("Sell")) {
+                        sellCounter++;
+                        anyCounterIncreased = true;
+
+                        if (orderID != null && !orderID.isEmpty()) {
+                            orderCanceller.cancelOrder(orderID);
+                        }
+
+                        JsonNode lastJson = buyMessagesQueue.poll();
+                        if (lastJson != null) {
+                            lastPrice = lastJson.get("price").asDouble();
+                        }
+
+                        List<Double> fibonacciNumbers = fiboGenerator.generateFibonacciSequence(sellCounter);
+                        double orderAmount = fibonacciNumbers.get(fibonacciNumbers.size() - 1) * coefficient;
+                        totalOrderAmount += orderAmount;
+
+                        Order order = Order.builder().orderQty(totalOrderAmount).orderType(OrderTypeConverter.OrderType.LMT).isBuy(true).symbol(Symbol.XBTUSD).price(lastPrice).build();
+
+                        orderSender.sendOrder(order);
+                        this.orderID = orderSender.getLastOrderID();
+                    }
+                    if (data.has("ordStatus") && data.get("ordStatus").asText().equals("Canceled") && data.has("orderID") && data.get("orderID").asText().equals(orderID)) {
+                        double returnedAmount = 0;
+                        if (data.has("orderQty")) {
+                            returnedAmount = data.get("orderQty").asDouble();
+                        }
+
+                        int desiredNumber = fiboGenerator.findNumberOfElements(returnedAmount, coefficient);
+                        orderMassOpener.generateBuyOrders(priceStep, coefficient, desiredNumber);
+                        logger.info("Order net reopened");
+                    }
+                  }
                 }
 
-                if (anyCounterIncreased && buyCounter == sellCounter) {
-                    orderCanceller.cancelAllOrders();
-                    BotExecutor botExecutor = new BotExecutor(apiKey, apiSecret, priceStep, coefficient, numberOfOrders);
-                    botExecutor.execute();
-                }
+            if (anyCounterIncreased && buyCounter == sellCounter) {
+                orderCanceller.cancelAllOrders();
+                buyCounter = 0;
+                sellCounter = 0;
+                BotExecutor botExecutor = new BotExecutor(apiKey, apiSecret, priceStep, coefficient, numberOfOrders);
+                botExecutor.execute();
             }
+
         } catch (Exception e) {
             logger.error("Error during request: " + e.getMessage());
         }
@@ -179,7 +175,7 @@ public class BitmexWebSocketClient {
                 pingScheduler.shutdown();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Error during request: " + e.getMessage());
         }
     }
 
