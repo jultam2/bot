@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #333; /* Темный фон */
+      color: white; /* Белый цвет текста */
+      text-align: center; /* Выравнивание по центру для содержимого body */
+      padding: 20px;
+    }
+
+    h1, p {
+      color: #ff5733; /* Оранжевый цвет для заголовка и текста */
+    }
+
+    .btn-primary {
+      background-color: #8b0000; /* Темно-красный цвет для кнопки */
+      border-color: #8b0000; /* Цвет границы кнопки */
+    }
+  </style>
+  <title>Мой первый HTML документ</title>
+</head>
+<body class="container mt-5">
+
+<h1>Welcome to Bitmex Trading Bot</h1>
+<p>Please, enter the following information to proceed</p>
+
+<form action="/Classss_war/TradingBotServlet" method="post" class="mt-4">
+  <table class="table table-dark table-striped">
+    <!-- (Таблица остается без изменений) -->
+    <tr>
+      <th>Parameter</th>
+      <th>Value</th>
+    </tr>
+    <tr>
+      <td>API Key:</td>
+      <td><input type="text" class="form-control" name="apiKey"></td>
+    </tr>
+    <tr>
+      <td>API Secret:</td>
+      <td><input type="text" class="form-control" name="apiSecret"></td>
+    </tr>
+    <tr>
+      <td>Price Step:</td>
+      <td><input type="text" class="form-control" name="priceStep"></td>
+    </tr>
+    <tr>
+      <td>Coefficient:</td>
+      <td><input type="text" class="form-control" name="coefficient"></td>
+    </tr>
+    <tr>
+      <td>Number of Orders:</td>
+      <td><input type="text" class="form-control" name="numberOfOrders"></td>
+    </tr>
+  </table>
+  <button type="submit" class="btn btn-primary">Start Trading</button>
+</form>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

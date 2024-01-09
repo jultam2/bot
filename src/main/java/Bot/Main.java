@@ -11,8 +11,8 @@ import java.util.concurrent.ExecutionException;
 public class Main {
     public static void main(String[] args) {
 //      так как юзер будет это все вводить, здесь должен быть UI (сделаю сервелетами)
-        String apiKey = "jjRD31eZEyh48sw-f3S_tCgO";
-        String apiSecret = "lTvHkKkX-4Vvxi5k7l_6wUHpUlBg0-ZmAwfU1ipqfTtue8Rf";
+        String apiKey = "EFM5XM5mKRybXej7MTjJ3j-w";
+        String apiSecret = "Job25yeeRVsU4INvWRkIh_gVVuyMJGp9naXSjUkGrbBaV9QL";
         double priceStep = 500.0;
         double coefficient = 100.0;
         int numberOfOrders = 1;
