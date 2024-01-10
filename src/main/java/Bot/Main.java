@@ -15,7 +15,7 @@ public class Main {
         String apiSecret = "Job25yeeRVsU4INvWRkIh_gVVuyMJGp9naXSjUkGrbBaV9QL";
         double priceStep = 500.0;
         double coefficient = 100.0;
-        int numberOfOrders = 1;
+        int numberOfOrders = 3;
 
         BotExecutor botExecutor = new BotExecutor(apiKey, apiSecret, priceStep, coefficient, numberOfOrders);
         botExecutor.execute();

@@ -6443,3 +6443,76 @@
  at [Source: (String)"pong"; line: 1, column: 5]
 2023-12-27 09:51:02,326 ERROR BitmexWebSocketClient - Error during request: Unrecognized token 'pong': was expecting (JSON String, Number, Array, Object or token 'null', 'true' or 'false')
  at [Source: (String)"pong"; line: 1, column: 5]
+2024-01-10 09:47:51,694 INFO  OrderHttpRequest - Created HttpRequest: https://testnet.bitmex.com/api/v1/instrument/active GET
+2024-01-10 09:47:51,729 INFO  OrderHttpRequest - Created HttpRequest: https://testnet.bitmex.com/api/v1/instrument/active GET
+2024-01-10 09:47:53,412 INFO  OrderHttpRequest - Created HttpRequest: https://testnet.bitmex.com/api/v1/order POST
+2024-01-10 09:47:53,710 INFO  OrderRepoList - Orders repository created
+2024-01-10 09:47:53,714 INFO  PriceGetter - Order: {"symbol":"XBTUSD","side":"Buy","orderQty":100.0,"price":45485.0,"ordType":"Limit"}created
+2024-01-10 09:47:53,715 INFO  OrderMassOpener - 3buy orders created
+2024-01-10 09:47:53,717 INFO  OrderHttpRequest - Created HttpRequest: https://testnet.bitmex.com/api/v1/order POST
+2024-01-10 09:47:53,846 INFO  OrderRepoList - Orders repository created
+2024-01-10 09:47:53,847 INFO  PriceGetter - Order: {"symbol":"XBTUSD","side":"Buy","orderQty":100.0,"price":44985.0,"ordType":"Limit"}created
+2024-01-10 09:47:53,847 INFO  OrderMassOpener - 3buy orders created
+2024-01-10 09:47:53,849 INFO  OrderHttpRequest - Created HttpRequest: https://testnet.bitmex.com/api/v1/order POST
+2024-01-10 09:47:53,978 INFO  OrderRepoList - Orders repository created
+2024-01-10 09:47:53,978 INFO  PriceGetter - Order: {"symbol":"XBTUSD","side":"Buy","orderQty":100.0,"price":44485.0,"ordType":"Limit"}created
+2024-01-10 09:47:53,979 INFO  OrderMassOpener - 3buy orders created
+2024-01-10 09:47:54,506 INFO  BitmexWebSocketClient - Authentication completed
+2024-01-10 09:47:54,510 INFO  BitmexWebSocketClient - Session opened
+2024-01-10 09:47:54,615 ERROR WebSocketHandler - Error during request: Unrecognized token 'pong': was expecting (JSON String, Number, Array, Object or token 'null', 'true' or 'false')
+ at [Source: (String)"pong"; line: 1, column: 5]
+2024-01-10 09:47:59,624 ERROR WebSocketHandler - Error during request: Unrecognized token 'pong': was expecting (JSON String, Number, Array, Object or token 'null', 'true' or 'false')
+ at [Source: (String)"pong"; line: 1, column: 5]
+2024-01-10 09:48:03,164 INFO  DeleteHttpRequest - Created HttpRequest: https://testnet.bitmex.com/api/v1/order/all?filter=%7B%22side%22%3A%20%22Sell%22%7D DELETE
+2024-01-10 09:48:03,492 INFO  OrderCanceller - All orders cancelled
+2024-01-10 09:48:04,505 INFO  OrderHttpRequest - Created HttpRequest: https://testnet.bitmex.com/api/v1/order POST
+2024-01-10 09:48:04,833 INFO  OrderRepoList - Orders repository created
+2024-01-10 09:48:04,834 INFO  PriceGetter - Order: {"symbol":"XBTUSD","side":"Sell","orderQty":100.0,"price":48985.0,"ordType":"Limit"}created
+2024-01-10 09:48:04,835 INFO  WebSocketHandler - Sell orders opened
+2024-01-10 09:48:04,847 INFO  OrderHttpRequest - Created HttpRequest: https://testnet.bitmex.com/api/v1/order POST
+2024-01-10 09:48:05,158 INFO  OrderRepoList - Orders repository created
+2024-01-10 09:48:05,159 INFO  PriceGetter - Order: {"symbol":"XBTUSD","side":"Buy","orderQty":100.0,"price":45485.0,"ordType":"Limit"}created
+2024-01-10 09:48:05,161 INFO  DeleteHttpRequest - Created HttpRequest: https://testnet.bitmex.com/api/v1/order?orderID=d77bffff-ca4d-4fca-a084-fcf3b232937d DELETE
+2024-01-10 09:48:05,370 INFO  OrderCanceller - All orders cancelled
+2024-01-10 09:48:05,374 INFO  OrderRepoList - Order: d77bffff-ca4d-4fca-a084-fcf3b232937dremoved
+2024-01-10 09:48:05,375 INFO  OrderCanceller - Order: d77bffff-ca4d-4fca-a084-fcf3b232937d cancelled
+2024-01-10 09:48:05,379 INFO  OrderHttpRequest - Created HttpRequest: https://testnet.bitmex.com/api/v1/order POST
+2024-01-10 09:48:05,528 INFO  OrderRepoList - Orders repository created
+2024-01-10 09:48:05,529 INFO  PriceGetter - Order: {"symbol":"XBTUSD","side":"Buy","orderQty":200.0,"price":45485.0,"ordType":"Limit"}created
+2024-01-10 09:48:05,530 INFO  DeleteHttpRequest - Created HttpRequest: https://testnet.bitmex.com/api/v1/order?orderID=1a2b1f9e-44aa-4615-8d06-2e58798ca0b4 DELETE
+2024-01-10 09:48:05,670 INFO  OrderCanceller - All orders cancelled
+2024-01-10 09:48:05,670 INFO  OrderRepoList - Order: 1a2b1f9e-44aa-4615-8d06-2e58798ca0b4removed
+2024-01-10 09:48:05,671 INFO  OrderCanceller - Order: 1a2b1f9e-44aa-4615-8d06-2e58798ca0b4 cancelled
+2024-01-10 09:48:05,673 INFO  OrderHttpRequest - Created HttpRequest: https://testnet.bitmex.com/api/v1/order POST
+2024-01-10 09:48:05,830 INFO  OrderRepoList - Orders repository created
+2024-01-10 09:48:05,831 INFO  PriceGetter - Order: {"symbol":"XBTUSD","side":"Buy","orderQty":300.0,"price":45485.0,"ordType":"Limit"}created
+2024-01-10 09:48:05,832 ERROR WebSocketHandler - Error during request: Unrecognized token 'pong': was expecting (JSON String, Number, Array, Object or token 'null', 'true' or 'false')
+ at [Source: (String)"pong"; line: 1, column: 5]
+2024-01-10 09:48:05,838 INFO  DeleteHttpRequest - Created HttpRequest: https://testnet.bitmex.com/api/v1/order/all?filter=%7B%22side%22%3A%20%22Sell%22%7D DELETE
+2024-01-10 09:48:05,976 INFO  OrderCanceller - All orders cancelled
+2024-01-10 09:48:06,981 INFO  OrderHttpRequest - Created HttpRequest: https://testnet.bitmex.com/api/v1/order POST
+2024-01-10 09:48:07,113 INFO  OrderRepoList - Orders repository created
+2024-01-10 09:48:07,113 INFO  PriceGetter - Order: {"symbol":"XBTUSD","side":"Sell","orderQty":100.0,"price":48985.0,"ordType":"Limit"}created
+2024-01-10 09:48:07,113 INFO  OrderMassOpener - 2sell orders created
+2024-01-10 09:48:07,115 INFO  OrderHttpRequest - Created HttpRequest: https://testnet.bitmex.com/api/v1/order POST
+2024-01-10 09:48:07,247 INFO  OrderRepoList - Orders repository created
+2024-01-10 09:48:07,248 INFO  PriceGetter - Order: {"symbol":"XBTUSD","side":"Sell","orderQty":100.0,"price":48485.0,"ordType":"Limit"}created
+2024-01-10 09:48:07,250 INFO  WebSocketHandler - Sell orders opened
+2024-01-10 09:48:07,254 INFO  DeleteHttpRequest - Created HttpRequest: https://testnet.bitmex.com/api/v1/order/all?filter=%7B%22side%22%3A%20%22Sell%22%7D DELETE
+2024-01-10 09:48:07,400 INFO  OrderCanceller - All orders cancelled
+2024-01-10 09:48:08,415 INFO  OrderHttpRequest - Created HttpRequest: https://testnet.bitmex.com/api/v1/order POST
+2024-01-10 09:48:08,547 INFO  OrderRepoList - Orders repository created
+2024-01-10 09:48:08,548 INFO  PriceGetter - Order: {"symbol":"XBTUSD","side":"Sell","orderQty":100.0,"price":48985.0,"ordType":"Limit"}created
+2024-01-10 09:48:08,548 INFO  OrderMassOpener - 3sell orders created
+2024-01-10 09:48:08,549 INFO  OrderHttpRequest - Created HttpRequest: https://testnet.bitmex.com/api/v1/order POST
+2024-01-10 09:48:08,685 INFO  OrderRepoList - Orders repository created
+2024-01-10 09:48:08,687 INFO  PriceGetter - Order: {"symbol":"XBTUSD","side":"Sell","orderQty":100.0,"price":48485.0,"ordType":"Limit"}created
+2024-01-10 09:48:08,688 INFO  OrderMassOpener - 3sell orders created
+2024-01-10 09:48:08,689 INFO  OrderHttpRequest - Created HttpRequest: https://testnet.bitmex.com/api/v1/order POST
+2024-01-10 09:48:08,829 INFO  OrderRepoList - Orders repository created
+2024-01-10 09:48:08,830 INFO  PriceGetter - Order: {"symbol":"XBTUSD","side":"Sell","orderQty":100.0,"price":47985.0,"ordType":"Limit"}created
+2024-01-10 09:48:08,830 INFO  WebSocketHandler - Sell orders opened
+2024-01-10 09:48:08,831 INFO  DeleteHttpRequest - Created HttpRequest: https://testnet.bitmex.com/api/v1/order/all DELETE
+2024-01-10 09:48:08,986 INFO  OrderCanceller - All orders cancelled
+2024-01-10 09:48:08,990 INFO  OrderHttpRequest - Created HttpRequest: https://testnet.bitmex.com/api/v1/instrument/active GET
+2024-01-10 09:48:08,995 INFO  OrderHttpRequest - Created HttpRequest: https://testnet.bitmex.com/api/v1/instrument/active GET

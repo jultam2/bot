@@ -1,5 +1,6 @@
 package Bot.model;
 
+import Bot.service.BitmexWebSocketClient;
 import lombok.Getter;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +13,10 @@ public class BotList {
 
     private BotList() {
         botStatusMap = new HashMap<>();
+    }
+
+    public BotStatus getBotStatusByIndex(int index) {
+        return botStatusMap.get(index);
     }
 
 }

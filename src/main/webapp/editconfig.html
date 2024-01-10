@@ -21,27 +21,19 @@
       border-color: #8b0000; /* Цвет границы кнопки */
     }
   </style>
-  <title>Welcome to Bitmex Bot</title>
+  <title>Add new configuration</title>
 </head>
 <body class="container mt-5">
 
-<h1>Welcome to Bitmex Trading Bot</h1>
+<h1>Add new configuration</h1>
 <p>Please, enter the following information to proceed</p>
 
-<form action="/Classss_war/TradingBotServlet" method="post" class="mt-4">
+<form action="/Classss_war/EditConfigServlet" method="post" class="mt-4">
   <table class="table table-dark table-striped">
     <!-- (Таблица остается без изменений) -->
     <tr>
       <th>Parameter</th>
       <th>Value</th>
-    </tr>
-    <tr>
-      <td>API Key:</td>
-      <td><input type="text" class="form-control" name="apiKey"></td>
-    </tr>
-    <tr>
-      <td>API Secret:</td>
-      <td><input type="text" class="form-control" name="apiSecret"></td>
     </tr>
     <tr>
       <td>Price Step:</td>

@@ -48,7 +48,7 @@ public class OrderMassOpener {
 
     public void generateSellOrders(double priceStep, double coefficient, int numberOfOrders) {
         List<Double> fibonacciNumbers = new FiboGenerator().generateFibonacciSequence(numberOfOrders);
-        double startPrice = initialPrice + 3000.;
+        double startPrice = initialPrice + 500.;
 
         for (int i = numberOfOrders - 1; i >= 0; i--) {
             double orderAmount = fibonacciNumbers.get(i) * coefficient;

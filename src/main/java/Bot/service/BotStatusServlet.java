@@ -1,6 +1,7 @@
 package Bot.service;
 import Bot.model.BotList;
 import Bot.model.BotStatus;
+import Bot.model.WebSocketList;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -31,11 +32,23 @@ public class BotStatusServlet extends HttpServlet {
         String action = request.getParameter("action");
 
         if ("stop".equals(action)) {
-            // Логика остановки бота
+            int index = Integer.parseInt(request.getParameter("index"));
+            BitmexWebSocketClient bitmexWebSocketClient = WebSocketList.getInstance().getBotByIndex(index);
+            bitmexWebSocketClient.stopWebsocketThreads();
+            BotStatus botStatus = BotList.getInstance().getBotStatusByIndex(index);
+            botStatus.updateBoolean(false);
 
         } else if ("delete".equals(action)) {
-            // Логика удаления бота
-            // ... (Ваш код удаления бота)
+            int index = Integer.parseInt(request.getParameter("index"));
+            BotStatus botStatus = BotList.getInstance().getBotStatusByIndex(index);
+            botStatus.setDeleted(true);
+            WebSocketList webSocketList = WebSocketList.getInstance();
+            Map<Integer, BitmexWebSocketClient> socketStatusMap = webSocketList.getSocketStatusMap();
+            socketStatusMap.remove(index);
+            BotList botList = BotList.getInstance();
+            Map<Integer, BotStatus> botStatusMap = botList.getBotStatusMap();
+            botStatusMap.remove(index);
+            System.out.println(socketStatusMap.size());
         }
 
         response.sendRedirect("/Classss_war/BotStatusServlet");

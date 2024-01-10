@@ -1,24 +1,29 @@
 package Bot.service;
-
 import Bot.model.BotList;
 import Bot.model.BotStatus;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.Map;
 import java.util.Properties;
 
-@WebServlet("/TradingBotServlet")
-public class TradingBotServlet extends HttpServlet {
+@WebServlet("/EditConfigServlet")
+public class EditConfigServlet extends HttpServlet {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/editconfig.html");
+        dispatcher.forward(request, response);
+    }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String apiKey = request.getParameter("apiKey");
-        String apiSecret = request.getParameter("apiSecret");
+        Properties commonBotProperties = loadCommonBotProperties();
+        String apiKey = commonBotProperties.getProperty("apiKey");
+        String apiSecret = commonBotProperties.getProperty("apiSecret");
+
         double priceStep = Double.parseDouble(request.getParameter("priceStep"));
         double coefficient = Double.parseDouble(request.getParameter("coefficient"));
         int numberOfOrders = Integer.parseInt(request.getParameter("numberOfOrders"));
@@ -26,13 +31,10 @@ public class TradingBotServlet extends HttpServlet {
         BotList botList = BotList.getInstance();
         Map<Integer, BotStatus> botStatusMap = botList.getBotStatusMap();
 
-        // Создание нового объекта BotStatus и добавление в botStatusMap с приставкой индекса
         int newIndex = botStatusMap.size() + 1;
         BotStatus botStatus = new BotStatus();
         botStatus.updateStatus(apiKey, priceStep, coefficient, numberOfOrders, true);
         botStatusMap.put(newIndex, botStatus);
-
-        saveApiKeySecretToFile(apiKey, apiSecret);
 
         BotExecutor botExecutor = new BotExecutor(apiKey, apiSecret, priceStep, coefficient, numberOfOrders);
         new Thread(botExecutor::execute).start();
@@ -40,17 +42,16 @@ public class TradingBotServlet extends HttpServlet {
         response.sendRedirect("/Classss_war/BotStatusServlet");
     }
 
-    private void saveApiKeySecretToFile(String apiKey, String apiSecret) {
+    private Properties loadCommonBotProperties() {
         Properties properties = new Properties();
-        properties.setProperty("apiKey", apiKey);
-        properties.setProperty("apiSecret", apiSecret);
-
         String fileName = "common-bot.properties";
 
-        try (OutputStream outputStream = new FileOutputStream(fileName)) {
-            properties.store(outputStream, "Common API Key and API Secret");
+        try (InputStream inputStream = new FileInputStream(fileName)) {
+            properties.load(inputStream);
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Обработайте исключение по вашему усмотрению
         }
+
+        return properties;
     }
 }
