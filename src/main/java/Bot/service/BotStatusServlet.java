@@ -38,6 +38,7 @@ public class BotStatusServlet extends HttpServlet {
             BotStatus botStatus = BotList.getInstance().getBotStatusByIndex(index);
             botStatus.updateBoolean(false);
 
+
         } else if ("delete".equals(action)) {
             int index = Integer.parseInt(request.getParameter("index"));
             BotStatus botStatus = BotList.getInstance().getBotStatusByIndex(index);
